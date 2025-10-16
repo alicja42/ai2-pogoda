@@ -14,7 +14,7 @@ class Measurement
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'measurements')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true, onDelete: "SET NULL")]
     private ?Location $location = null;
 
     #[ORM\Column(type: "string", length: 10)]
