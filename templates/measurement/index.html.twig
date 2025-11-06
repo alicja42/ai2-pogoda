@@ -12,7 +12,9 @@
                 <th>City</th>
                 <th>Date</th>
                 <th>Celsius</th>
-                <th>actions</th>
+                {% if is_granted('ROLE_MEASUREMENT_SHOW') or is_granted('ROLE_MEASUREMENT_EDIT') %}
+                    <th>actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -29,10 +31,16 @@
 
                 <td>{{ measurement.date|date('Y-m-d') }}</td>
                 <td>{{ measurement.celsius }}</td>
-                <td>
-                    <a href="{{ path('app_measurement_show', {'id': measurement.id}) }}">show</a>
-                    <a href="{{ path('app_measurement_edit', {'id': measurement.id}) }}">edit</a>
-                </td>
+                {% if is_granted('ROLE_MEASUREMENT_SHOW') or is_granted('ROLE_MEASUREMENT_EDIT') %}
+                    <td>
+                        {% if is_granted('ROLE_MEASUREMENT_SHOW') %}
+                            <a href="{{ path('app_measurement_show', {'id': measurement.id}) }}">show</a>
+                        {% endif %}
+                        {% if is_granted('ROLE_MEASUREMENT_EDIT') %}
+                            <a href="{{ path('app_measurement_edit', {'id': measurement.id}) }}">edit</a>
+                        {% endif %}
+                    </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>
@@ -42,6 +50,14 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_measurement_new') }}">Create new</a>
-    <a href="{{ path('app_location_index') }}">To locations</a>
+{#    <a href="{{ path('app_measurement_new') }}">Create new</a>#}
+{#    <a href="{{ path('app_location_index') }}">To locations</a>#}
+
+    {% if is_granted('ROLE_MEASUREMENT_NEW') %}
+        <a href="{{ path('app_measurement_new') }}">Create new</a>
+    {% endif %}
+
+    {% if is_granted('ROLE_LOCATION_INDEX') %}
+        <a href="{{ path('app_location_index') }}">To locations</a>
+    {% endif %}
 {% endblock %}
